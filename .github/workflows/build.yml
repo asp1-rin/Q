@@ -9,10 +9,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
@@ -23,7 +24,14 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller --onefile --icon=icon/Q.ico--name Q Q.py
+        if (Test-Path "icon/Q.ico") {
+          pyinstaller --onefile --icon="icon/Q.ico" --name Q Q.py
+        } elseif (Test-Path "Q.ico") {
+          pyinstaller --onefile --icon="Q.ico" --name Q Q.py
+        } else {
+          echo "Icon not found, building without icon"
+          pyinstaller --onefile --name Q Q.py
+        }
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
