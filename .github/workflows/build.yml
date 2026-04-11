@@ -26,7 +26,7 @@ jobs:
         pyinstaller --onefile --icon=Q/Q.ico --name Q Q.py
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Q-Windows-EXE
         path: dist/Q.exe
