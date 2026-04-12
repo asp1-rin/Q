@@ -20,17 +20,19 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install frida-tools pyinstaller
+        # 에임 오버레이를 위해 PyQt6가 반드시 포함되어야 합니다.
+        pip install frida-tools pyinstaller PyQt6
 
     - name: Build EXE
       run: |
+        # --noconsole을 추가해서 프로그램 실행 시 검은 창이 안 뜨게 했습니다.
         if (Test-Path "icon/Q.ico") {
-          pyinstaller --onefile --icon="icon/Q.ico" --name Q Q.py
+          pyinstaller --onefile --noconsole --icon="icon/Q.ico" --name Q Q.py
         } elseif (Test-Path "Q.ico") {
-          pyinstaller --onefile --icon="Q.ico" --name Q Q.py
+          pyinstaller --onefile --noconsole --icon="Q.ico" --name Q Q.py
         } else {
           echo "Icon not found, building without icon"
-          pyinstaller --onefile --name Q Q.py
+          pyinstaller --onefile --noconsole --name Q Q.py
         }
 
     - name: Upload Artifact
