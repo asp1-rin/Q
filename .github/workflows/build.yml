@@ -4,15 +4,23 @@ on:
   push:
     branches: [ "main" ]
 
+# [중요] 릴리즈 생성을 위해 권한을 명시적으로 부여합니다.
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
+    
+    # Node.js 24 환경을 강제로 사용하도록 설정
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-    - uses: actions/checkout@v4 # 최신 버전으로 업데이트
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v5 # 최신 버전으로 업데이트
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
@@ -23,17 +31,17 @@ jobs:
 
     - name: Build EXE with PyInstaller
       run: |
-        # 아이콘 경로 확인 필수
+        # 아이콘 파일이 icon/Q.ico 경로에 있는지 꼭 확인하세요!
         pyinstaller --noconfirm --onefile --windowed --icon="icon/Q.ico" --name "Q" --clean Q.py
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4 # 에러 원인 해결 (v3 -> v4)
+      uses: actions/upload-artifact@v4
       with:
         name: Q-Executable
         path: dist/Q.exe
 
     - name: Create Release
-      uses: softprops/action-gh-release@v2 # 최신 버전으로 업데이트
+      uses: softprops/action-gh-release@v2
       with:
         files: dist/Q.exe
         tag_name: v${{ github.run_number }}
