@@ -1,14 +1,21 @@
 var Weapon = {
+    recoilOriginal: null,
+    spreadOriginal: null,
+
     setNoRecoil: function(enable) {
         const addr = Module.findBaseAddress(OFFSETS.G_LIB).add(OFFSETS.WEAPON_RECOIL_PATCH);
         if (!addr) return;
 
+        if (this.recoilOriginal === null) {
+            this.recoilOriginal = addr.readByteArray(4);
+        }
+
         Memory.patchCode(addr, 4, code => {
             const writer = new Arm64Writer(code);
             if (enable) {
-                writer.putBytes(hexToBytes("0040201E")); 
+                writer.putBytes(hexToBytes("0040201E"));
             } else {
-                writer.putBytes(hexToBytes("F3031FA8")); // 원본 복구용 바이트 (예시)
+                writer.putBytes(new Uint8Array(this.recoilOriginal));
             }
             writer.flush();
         });
@@ -18,12 +25,16 @@ var Weapon = {
         const addr = Module.findBaseAddress(OFFSETS.G_LIB).add(OFFSETS.WEAPON_SPREAD_PATCH);
         if (!addr) return;
 
+        if (this.spreadOriginal === null) {
+            this.spreadOriginal = addr.readByteArray(4);
+        }
+
         Memory.patchCode(addr, 4, code => {
             const writer = new Arm64Writer(code);
             if (enable) {
                 writer.putBytes(hexToBytes("0040201E"));
             } else {
-                writer.putBytes(hexToBytes("F3031FA8")); // 원본 복구용 바이트 (예시)
+                writer.putBytes(new Uint8Array(this.spreadOriginal));
             }
             writer.flush();
         });
@@ -37,5 +48,4 @@ function hexToBytes(hex) {
     return new Uint8Array(bytes);
 }
 
-// Q.py에서 호출할 수 있도록 전역 노출
 global.Weapon = Weapon;
