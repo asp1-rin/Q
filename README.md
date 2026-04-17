@@ -1,4 +1,4 @@
-# Q.exe: Advanced Game Analysis & Hooking Tool
+ㅣ# Q.exe: Advanced Game Analysis & Hooking Tool
 
 Q.exe is a high-performance game analysis framework based on the Frida 16.2 engine, designed for Android emulators and physical devices via ADB. This project serves as an educational tool for reverse engineering and security research.
 
@@ -24,4 +24,4 @@ Q.exe is a high-performance game analysis framework based on the Frida 16.2 engi
 ## Disclaimer
 This program is developed strictly for educational and research purposes. Use in commercial live games is prohibited, and the user assumes all responsibility for any consequences arising from its use.
 
-## made by asp1-rin
+**made by asp1-rin**
